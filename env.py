@@ -10,7 +10,6 @@ from nd_to_json import nd_to_json, json_to_nd
 class AegisEnv(gym.Env):
     def __init__(self, obs_url, obs_shape, action_shape, port=80, nsteps=None, action_low=-1, action_high=1):
         self.obs_url = obs_url
-        print(obs_shape, action_shape)
 
         if type(action_shape) is int:
             self.action_space = spaces.Discrete(action_shape)

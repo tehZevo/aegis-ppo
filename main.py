@@ -22,6 +22,7 @@ MODEL_PATH = os.getenv("MODEL_PATH", "models/model")
 
 # Create environment
 env = AegisEnv(obs_url, obs_shape, action_shape, port=port)
+env = DummyVecEnv([lambda: env])
 #TODO: support LSTM policy
 
 model = None
@@ -32,7 +33,7 @@ else:
     try:
         model = PPO2.load(MODEL_PATH, env=env)
     except:
-        print('"{}" not found. Creating new model.'.format(MODEL_PATH))
+        print('"{}" not found, or error occurred when loading model. Creating new model.'.format(MODEL_PATH))
         model = PPO2(policy, env)
         model.save(MODEL_PATH)
 
