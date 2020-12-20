@@ -34,6 +34,7 @@ else:
     except:
         print('"{}" not found. Creating new model.'.format(MODEL_PATH))
         model = PPO2(policy, env)
+        model.save(MODEL_PATH)
 
 #train
 while True:
