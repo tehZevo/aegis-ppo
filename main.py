@@ -31,9 +31,12 @@ if RESET:
     model = PPO2(policy, env)
 else:
     try:
+        print("Loading", MODEL_PATH)
         model = PPO2.load(MODEL_PATH, env=env)
-    except:
-        print('"{}" not found, or error occurred when loading model. Creating new model.'.format(MODEL_PATH))
+        print(MODEL_PATH, "loaded")
+    except ValueError as e:
+        print(e)
+        print('"{}" not found, or other ValueError occurred when loading model. Creating new model.'.format(MODEL_PATH))
         model = PPO2(policy, env)
         model.save(MODEL_PATH)
 
