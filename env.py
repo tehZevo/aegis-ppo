@@ -66,7 +66,7 @@ class AegisEnv(gym.Env):
         while obs is None:
             try:
                 obs = json_to_nd(ppcl(self.obs_url))
-            except e:
+            except ValueError as e:
                 print("Error when getting observation")
                 print(e)
 
