@@ -9,8 +9,6 @@ import sys
 import signal
 signal.signal(signal.SIGTERM, lambda: sys.exit(0))
 
-# obs_url = os.getenv("OBS_URL")
-obs_url = os.getenv("OBS_URL").split()
 obs_shape = os.getenv("OBS_SHAPE", "[]")
 obs_shape = json.loads(obs_shape)
 action_shape = os.getenv("ACTION_SHAPE", "[]")
@@ -30,7 +28,7 @@ GAMMA = float(os.getenv("GAMMA", 0.99))
 LAMBDA = float(os.getenv("LAMBDA", 0.95))
 
 # Create environment
-env = AegisEnv(obs_url, obs_shape, action_shape, port=port)
+env = AegisEnv(obs_shape, action_shape, port=port)
 env = DummyVecEnv([lambda: env])
 #TODO: support LSTM/CNN policies
 

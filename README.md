@@ -17,3 +17,6 @@ Powered by [stable-baselines](https://stable-baselines.readthedocs.io/en/master/
 * support LSTM/CNN policies
 * test :)
 * figure out where first obs should come from..
+* allow done to be set through a route eg `/done`
+* more configuration of aegis env
+* move AegisEnv to separate repo?
