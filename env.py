@@ -2,14 +2,14 @@ import gym
 from gym import spaces
 import numpy as np
 import threading
+import time
 
 from protopost import ProtoPost
 from protopost import protopost_client as ppcl
 from nd_to_json import nd_to_json, json_to_nd
 
 class AegisEnv(gym.Env):
-    def __init__(self, obs_url, obs_shape, action_shape, port=80, nsteps=None, action_low=-1, action_high=1):
-        self.obs_url = obs_url
+    def __init__(self, obs_shape, action_shape, port=80, nsteps=None, action_low=-1, action_high=1):
 
         if type(action_shape) is int:
             self.action_space = spaces.Discrete(action_shape)
@@ -20,7 +20,12 @@ class AegisEnv(gym.Env):
         self.observation_space = spaces.Box(low=-np.inf, high=np.inf, shape=obs_shape)
 
         self.step_reward = 0 #received rewards
-        self.action = None #action to serve
+
+        self.obs_shape = obs_shape
+        self.observation = np.zeros(self.obs_shape)
+        self.action = None
+        #TODO: allow done to be set
+        #self.done = False
 
         self.nsteps = nsteps
         self.step_counter = 0
@@ -31,22 +36,22 @@ class AegisEnv(gym.Env):
         self.start_server(port)
 
     def start_server(self, port):
-        #build protopost routes
-        def pp_action(data):
-            return nd_to_json(self.action)
 
         def pp_reward(data):
             self.step_reward += data
 
         def pp_step(data):
+            #get observation from data and store for .step later
+            self.observation = json_to_nd(data)
             #set update event
             self.update_event.set()
             #wait for step to be ready
             self.flask_wait.wait()
             self.flask_wait.clear()
 
+            return nd_to_json(self.action)
+
         routes = {
-            "action": pp_action,
             "reward": pp_reward,
             "step": pp_step
         }
@@ -59,29 +64,15 @@ class AegisEnv(gym.Env):
         thread.daemon = True
         thread.start()
 
-    def get_observation(self):
-        #catch None/errors and keep trying until we get a response
-        obs = None
-        while obs is None:
-            try:
-                obs = json_to_nd(ppcl(self.obs_url))
-            except ValueError as e:
-                print("Error when getting observation")
-                print(e)
-
-        return obs
-
     def step(self, action):
         #set action
         self.action = action
 
-        #wait for update call
+        #wait for step call
         self.flask_wait.set()
         self.update_event.wait()
         self.update_event.clear()
 
-        #grab obs
-        obs = self.get_observation()
         #flip reward
         r = self.step_reward
         self.step_reward = 0
@@ -90,9 +81,10 @@ class AegisEnv(gym.Env):
         if self.nsteps is not None and self.step_counter >= self.nsteps:
             done = True
 
-        return obs, r, done, {}
+        return self.observation, r, done, {}
 
     def reset(self):
         self.step_counter = 0
-
-        return self.get_observation()
+        #TODO: figure this out (where should first obs come from?)
+        #we could wait for a /step call, but then the action returned would be null
+        return self.observation
