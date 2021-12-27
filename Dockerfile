@@ -1,11 +1,15 @@
-FROM stablebaselines/rl-baselines-zoo-cpu
+FROM python:3.7
 
 WORKDIR /app
 
 RUN mkdir -p /app/models
 
+RUN apt-get update
+RUN apt-get update && apt-get install libgl1 -y
+RUN apt-get install cmake libopenmpi-dev python3-dev zlib1g-dev -y
+RUN apt-get install git -y
 RUN pip install --upgrade pip
-COPY requirements.txt ./
+COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 COPY . .

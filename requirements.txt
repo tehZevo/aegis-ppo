@@ -1,3 +1,5 @@
+tensorflow==1.14
+stable-baselines
 numpy
 gym
 git+https://github.com/tehzevo/nd-to-json
