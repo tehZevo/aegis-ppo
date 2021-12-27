@@ -1,7 +1,3 @@
-flask
-flask_restful
-flask_cors
-requests
 numpy
 gym
 git+https://github.com/tehzevo/nd-to-json
