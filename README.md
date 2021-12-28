@@ -19,5 +19,6 @@ Powered by [stable-baselines](https://stable-baselines.readthedocs.io/en/master/
 * figure out where first obs should come from..
 * allow done to be set through a route eg `/done`
 * more configuration of aegis env
+  * especially allow configuration of obs/action low/high
 * move AegisEnv to separate repo?
 * update to [stable baselines / zoo 3](https://github.com/DLR-RM/rl-baselines3-zoo)

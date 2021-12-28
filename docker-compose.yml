@@ -4,7 +4,9 @@ services:
   ppo:
     build: .
     environment:
-      OBS_SHAPE: "[64]"
-      ACTION_SHAPE: "[4]"
+      OBS_SHAPE: "[1280]"
+      ACTION_SHAPE: "[12]"
+    volumes:
+      - "./models:/app/models"
     ports:
       - "8080:80"

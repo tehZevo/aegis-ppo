@@ -15,7 +15,7 @@ class AegisEnv(gym.Env):
             self.action_space = spaces.Discrete(action_shape)
         else:
             #self.action_space = spaces.Box(low=-np.inf, high=np.inf, shape=action_shape)
-            self.action_space = spaces.Box(low=action_low, high=action_high, shape=action_shape) #TODO: testing this
+            self.action_space = spaces.Box(low=action_low, high=action_high, shape=action_shape)
 
         self.observation_space = spaces.Box(low=-np.inf, high=np.inf, shape=obs_shape)
 
