@@ -18,4 +18,3 @@ Powered by [stable-baselines](https://stable-baselines.readthedocs.io/en/master/
 * test :)
 * figure out where first obs should come from..
 * allow done to be set through a route eg `/done`
-* update to [stable baselines / zoo 3](https://github.com/DLR-RM/rl-baselines3-zoo)
