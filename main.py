@@ -1,4 +1,5 @@
 import os
+import json
 
 from stable_baselines3.common.vec_env import DummyVecEnv
 from stable_baselines3 import PPO
@@ -23,6 +24,7 @@ VERBOSE = int(os.getenv("VERBOSE", 0))
 #ppo params
 #according to defaults here https://stable-baselines.readthedocs.io/en/master/modules/ppo2.html
 #TODO: make these default to none so they arent filled in maybe idk
+#TODO: env var for PPO n_steps param (defaults to 128)
 LEARNING_RATE = float(os.getenv("LEARNING_RATE", 0.00025))
 GAMMA = float(os.getenv("GAMMA", 0.99))
 LAMBDA = float(os.getenv("LAMBDA", 0.95))
