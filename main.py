@@ -1,7 +1,7 @@
 import os
 
-from stable_baselines.common.vec_env import DummyVecEnv
-from stable_baselines import PPO2
+from stable_baselines3.common.vec_env import DummyVecEnv
+from stable_baselines3 import PPO
 from env import AegisEnv
 import json
 
@@ -35,16 +35,16 @@ env = DummyVecEnv([lambda: env])
 model = None
 #load model if not RESET
 if RESET:
-    model = PPO2(policy, env)
+    model = PPO(policy, env)
 else:
     try:
         print("Loading", MODEL_PATH)
-        model = PPO2.load(MODEL_PATH, env=env, learning_rate=LEARNING_RATE, gamma=GAMMA, lam=LAMBDA, verbose=VERBOSE)
+        model = PPO.load(MODEL_PATH, env=env, learning_rate=LEARNING_RATE, gamma=GAMMA, gae_lambda=LAMBDA, verbose=VERBOSE)
         print(MODEL_PATH, "loaded")
-    except ValueError as e:
+    except FileNotFoundError as e:
         print(e)
-        print('"{}" not found, or other ValueError occurred when loading model. Creating new model.'.format(MODEL_PATH))
-        model = PPO2(policy, env, learning_rate=LEARNING_RATE, gamma=GAMMA, lam=LAMBDA, verbose=VERBOSE)
+        print('"{}" not found. Creating new model.'.format(MODEL_PATH))
+        model = PPO(policy, env, learning_rate=LEARNING_RATE, gamma=GAMMA, gae_lambda=LAMBDA, verbose=VERBOSE)
         model.save(MODEL_PATH)
 
 #train

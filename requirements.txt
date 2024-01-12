@@ -1,6 +1,5 @@
-tensorflow==1.14
-stable-baselines
+stable-baselines3
 numpy
-gym
+gymnasium
 git+https://github.com/tehzevo/nd-to-json
 git+https://github.com/tehzevo/protopost-python

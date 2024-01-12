@@ -1,5 +1,5 @@
-import gym
-from gym import spaces
+import gymnasium as gym
+from gymnasium import spaces
 import numpy as np
 import threading
 import time
@@ -81,10 +81,10 @@ class AegisEnv(gym.Env):
         if self.nsteps is not None and self.step_counter >= self.nsteps:
             done = True
 
-        return self.observation, r, done, {}
+        return self.observation, r, done, False, {}
 
-    def reset(self):
+    def reset(self, **kwargs):
         self.step_counter = 0
         #TODO: figure this out (where should first obs come from?)
         #we could wait for a /step call, but then the action returned would be null
-        return self.observation
+        return self.observation, {}

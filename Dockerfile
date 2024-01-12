@@ -1,4 +1,4 @@
-FROM python:3.7
+FROM python:3.10
 
 WORKDIR /app
 
@@ -10,6 +10,7 @@ RUN apt-get install cmake libopenmpi-dev python3-dev zlib1g-dev -y
 RUN apt-get install git -y
 RUN pip install --upgrade pip
 COPY requirements.txt .
+#TODO: split some requirements out as this pulls in torch+cudnn etc all in this one line...
 RUN pip install -r requirements.txt
 
 COPY . .
