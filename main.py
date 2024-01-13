@@ -18,9 +18,9 @@ action_shape = json.loads(action_shape)
 port = int(os.getenv("PORT", 80))
 policy = os.getenv("POLICY", "MlpPolicy")
 #default to training every 32 steps
-N_STEPS = int(os.getenv("N_STEPS", 32))
-BATCH_SIZE = int(os.getenv("BATCH_SIZE", 32))
-N_EPOCHS = int(os.getenv("N_EPOCHS", 1))
+N_STEPS = int(os.getenv("N_STEPS", 2048))
+BATCH_SIZE = int(os.getenv("BATCH_SIZE", 64))
+N_EPOCHS = int(os.getenv("N_EPOCHS", 10))
 SAVE_STEPS = int(os.getenv("SAVE_STEPS", 1000))
 RESET = os.getenv("RESET", "").lower() in (True, 'true') #default to false
 MODEL_PATH = os.getenv("MODEL_PATH", "models/model")
