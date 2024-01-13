@@ -11,6 +11,9 @@ Powered by [stable-baselines](https://stable-baselines.readthedocs.io/en/master/
 * `MODEL_PATH` - load/save path for the Stable Baselines PPO model, defaults to `"models/model"`
 * `RESET` - if true, will create a new model instead of loading an existing one
 * `VERBOSE` - Stable Baselines PPO2 verbosity level (int)
+* `N_STEPS` - number of steps to run between training; defaults to 32
+* `BATCH_SIZE` - batch size when training; defaults to 32
+* `N_EPOCHS` - number of epochs to train; defaults to 1
 
 ## TODO
 * more documentation (env vars, request/response)
