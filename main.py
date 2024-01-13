@@ -38,10 +38,23 @@ env = AegisEnv(obs_shape, action_shape, port=port)
 env = DummyVecEnv([lambda: env])
 #TODO: support LSTM/CNN policies
 
+def make_ppo(env):
+  return PPO(
+      policy,
+      env,
+      n_steps=N_STEPS,
+      batch_size=BATCH_SIZE,
+      n_epochs=N_EPOCHS,
+      learning_rate=LEARNING_RATE,
+      gamma=GAMMA,
+      gae_lambda=LAMBDA,
+      verbose=VERBOSE
+  )
+
 model = None
 #load model if not RESET
 if RESET:
-    model = PPO(policy, env)
+    model = make_ppo(env)
 else:
     try:
         print("Loading", MODEL_PATH)
@@ -60,7 +73,7 @@ else:
     except FileNotFoundError as e:
         print(e)
         print('"{}" not found. Creating new model.'.format(MODEL_PATH))
-        model = PPO(policy, env, learning_rate=LEARNING_RATE, gamma=GAMMA, gae_lambda=LAMBDA, verbose=VERBOSE)
+        model = make_ppo(env)
         model.save(MODEL_PATH)
 
 class SaveCallback(BaseCallback):
