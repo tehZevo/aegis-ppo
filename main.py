@@ -55,6 +55,7 @@ model = None
 #load model if not RESET
 if RESET:
     model = make_ppo(env)
+    model.save(MODEL_PATH)
 else:
     try:
         print("Loading", MODEL_PATH)
