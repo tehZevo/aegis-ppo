@@ -2,6 +2,7 @@ import os
 import json
 
 from stable_baselines3.common.vec_env import DummyVecEnv
+from stable_baselines3.common.callbacks import BaseCallback
 from stable_baselines3 import PPO
 from env import AegisEnv
 import json
@@ -16,7 +17,7 @@ action_shape = os.getenv("ACTION_SHAPE", "[]")
 action_shape = json.loads(action_shape)
 port = int(os.getenv("PORT", 80))
 policy = os.getenv("POLICY", "MlpPolicy")
-nsteps = int(os.getenv("STEPS", 10000))
+SAVE_STEPS = int(os.getenv("SAVE_STEPS", 1000))
 RESET = os.getenv("RESET", "").lower() in (True, 'true') #default to false
 MODEL_PATH = os.getenv("MODEL_PATH", "models/model")
 VERBOSE = int(os.getenv("VERBOSE", 0))
@@ -49,7 +50,23 @@ else:
         model = PPO(policy, env, learning_rate=LEARNING_RATE, gamma=GAMMA, gae_lambda=LAMBDA, verbose=VERBOSE)
         model.save(MODEL_PATH)
 
+class SaveCallback(BaseCallback):
+    def __init__(self, save_steps=1000, verbose: int = 0):
+        super().__init__(verbose)
+        self.steps_since_last_save = 0
+        self.save_steps = save_steps
+
+    def _on_step(self):
+        self.steps_since_last_save += 1
+        if self.steps_since_last_save >= self.save_steps:
+          print(f"Saving model to '{MODEL_PATH}'...")
+          self.model.save(MODEL_PATH)
+          self.steps_since_last_save = 0
+
+        return True
+
+save_callback = SaveCallback(SAVE_STEPS)
+
 #train
 while True:
-  model.learn(total_timesteps=nsteps)
-  model.save(MODEL_PATH)
+  model.learn(total_timesteps=999999999, callback=save_callback)
